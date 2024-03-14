@@ -7,13 +7,13 @@ import (
 
 type Key struct {
 	gorm.Model
-	ID         string `gorm:"unique"`
-	Identifier string `gorm:"unique"`
+	ID         uuid.UUID `gorm:"type:uuid;primary_key;"`
+	Identifier string    `gorm:"unique"`
 	Quantity   int
 }
 
 func (u *Key) BeforeCreate(tx *gorm.DB) (err error) {
-	u.ID = uuid.NewString()
+	u.ID = uuid.New()
 
 	return
 }

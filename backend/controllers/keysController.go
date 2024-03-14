@@ -9,10 +9,17 @@ import (
 )
 
 func KeysCreate(c *gin.Context) {
+
+	user, _ := c.Get("user")
+	if !user.(models.UserResponse).IsAdmin {
+		c.JSON(http.StatusForbidden, gin.H{
+			"error": "Unauthorized",
+		})
+		return
+	}
 	var body struct {
 		Identifier string
 		Quantity   int
-		Password   string
 	}
 
 	if c.Bind(&body) != nil {

@@ -14,13 +14,8 @@ import (
 )
 
 func RequireAuth(c *gin.Context) {
-	type userResponse struct {
-		Id      string
-		Name    string
-		Email   string
-		IsAdmin bool
-	}
-	var responseUser userResponse
+
+	var responseUser models.UserResponse
 	tokenString, err := c.Cookie("Authorization")
 	if err != nil {
 

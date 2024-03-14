@@ -7,7 +7,7 @@ import (
 
 type User struct {
 	gorm.Model
-	ID       string `gorm:"unique"`
+	ID       uuid.UUID `gorm:"type:uuid;primary_key;"`
 	Name     string
 	Email    string `gorm:"unique"`
 	Password string
@@ -15,7 +15,7 @@ type User struct {
 }
 
 func (u *User) BeforeCreate(tx *gorm.DB) (err error) {
-	u.ID = uuid.NewString()
+	u.ID = uuid.New()
 
 	return
 }

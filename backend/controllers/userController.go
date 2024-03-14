@@ -113,10 +113,28 @@ func Login(c *gin.Context) {
 		// "token": tokenString,
 	})
 }
+func GetUsers(c *gin.Context) {
+	user, _ := c.Get("user")
+	if !user.(models.UserResponse).IsAdmin {
+		c.JSON(http.StatusForbidden, gin.H{
+			"error": "Unauthorized",
+		})
+		return
+	}
+	var users []models.User
+	var usersResponse []models.UserResponse
+	initializers.DB.Find(&users)
+	for _, v := range users {
+		var temp = models.UserResponse{Id: v.ID, Name: v.Name, Email: v.Email, IsAdmin: v.IsAdmin}
+		usersResponse = append(usersResponse, temp)
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"users": usersResponse,
+	})
+}
 func Validate(c *gin.Context) {
 
 	user, _ := c.Get("user")
-
 	c.JSON(http.StatusOK, gin.H{
 		"message": user,
 	})
