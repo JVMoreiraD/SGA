@@ -1,9 +1,10 @@
 version: "3.9"
 
 services:
+
   database:
     image: postgres
-    container_name: SGA
+    container_name: database_sga
     ports:
       - 5432:5432
     environment:
@@ -13,6 +14,21 @@ services:
     volumes:
       - pgdata:/data/postgres
 
+  app:
+    build: .
+    volumes:
+      - .:/app
+      - /app/tmp
+    ports:
+      - 3000:3000
+    environment:
+      - DATABASE=${DATABASE}
+      - SECRET=${SECRET}
+
+    links:
+      - database
+    depends_on:
+      - database
 volumes:
   pgdata:
     driver: local
