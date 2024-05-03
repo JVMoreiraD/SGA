@@ -18,8 +18,8 @@ func KeysCreate(c *gin.Context) {
 		return
 	}
 	var body struct {
-		Identifier string
-		Quantity   int
+		Identification string
+		Quantity       int
 	}
 
 	if c.Bind(&body) != nil {
@@ -28,10 +28,7 @@ func KeysCreate(c *gin.Context) {
 		})
 		return
 	} else {
-		key := models.Key{
-			Identifier: body.Identifier,
-			Quantity:   body.Quantity,
-		}
+		key := models.NewKey(body.Identification, body.Quantity)
 
 		result := initializers.DB.Create(&key)
 
@@ -45,3 +42,45 @@ func KeysCreate(c *gin.Context) {
 	}
 
 }
+
+func GetKeys(c *gin.Context) {
+	user, _ := c.Get("user")
+	if !user.(models.UserResponse).IsAdmin {
+		c.JSON(http.StatusForbidden, gin.H{
+			"error": "Unauthorized",
+		})
+		return
+	}
+	var keys []models.Key
+	initializers.DB.Preload("users").Find(&keys)
+
+	c.JSON(http.StatusOK, gin.H{
+		"keys": keys,
+	})
+}
+
+// func GiveKeyToUser(c *gin.Context) {
+// 	user, _ := c.Get("user")
+// 	if !user.(models.UserResponse).IsAdmin {
+// 		c.JSON(http.StatusForbidden, gin.H{
+// 			"error": "Unauthorized",
+// 		})
+// 		return
+// 	}
+// 	var body struct {
+// 		UserID uuid.UUID
+// 		KeyID  uuid.UUID
+// 	}
+// 	if c.Bind(&body) != nil {
+// 		c.JSON(http.StatusBadRequest, gin.H{
+// 			"error": "Failed to read body",
+// 		})
+// 		return
+// 	}
+// 	var key models.Key
+// 	initializers.DB.First(&key, "ID = ?", body.KeyID)
+
+// 	key.UserID = body.UserID
+
+// 	initializers.DB.Save(&key)
+// }
