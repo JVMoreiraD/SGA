@@ -27,45 +27,21 @@ func SignUp(c *gin.Context) {
 		return
 	}
 
-	hash, err := bcrypt.GenerateFromPassword([]byte(body.Password), 10)
-
+	user, err := models.NewBaseUser(body.Name, body.Email, body.Password, body.IsAdmin)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Failed to read body",
+			"error": "Failed to create user",
 		})
 	}
-	if body.IsAdmin {
-		user := models.User{
-			Name:     body.Name,
-			Email:    body.Email,
-			Password: string(hash),
-			IsAdmin:  true,
-		}
-		result := initializers.DB.Create(&user)
+	result := initializers.DB.Create(&user)
 
-		if result.Error != nil {
-			c.JSON(http.StatusBadRequest, gin.H{
-				"error": "Failed to create user",
-			})
-		}
-
-		c.JSON(http.StatusOK, gin.H{})
-	} else {
-		user := models.User{
-			Name:     body.Name,
-			Email:    body.Email,
-			Password: string(hash),
-		}
-		result := initializers.DB.Create(&user)
-
-		if result.Error != nil {
-			c.JSON(http.StatusBadRequest, gin.H{
-				"error": "Failed to create user",
-			})
-		}
-
-		c.JSON(http.StatusOK, gin.H{})
+	if result.Error != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Failed to create user",
+		})
 	}
+
+	c.JSON(http.StatusOK, gin.H{})
 
 }
 
@@ -85,7 +61,7 @@ func Login(c *gin.Context) {
 	initializers.DB.First(&user, "email = ?", body.Email)
 	if len(user.ID) == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Invalid email or password aaaa",
+			"error": "Invalid email or password",
 		})
 		return
 	}
@@ -124,8 +100,8 @@ func GetUsers(c *gin.Context) {
 	var users []models.User
 	var usersResponse []models.UserResponse
 	initializers.DB.Find(&users)
-	for _, v := range users {
-		var temp = models.UserResponse{Id: v.ID, Name: v.Name, Email: v.Email, IsAdmin: v.IsAdmin}
+	for _, user := range users {
+		var temp = models.UserResponse{Id: user.ID, Name: user.Name, Email: user.Email, IsAdmin: user.IsAdmin}
 		usersResponse = append(usersResponse, temp)
 	}
 	c.JSON(http.StatusOK, gin.H{
@@ -139,3 +115,14 @@ func Validate(c *gin.Context) {
 		"message": user,
 	})
 }
+
+// func AssignLockerToUser(c *gin.Context) {
+// 	user, _ := c.Get("user")
+// 	if !user.(models.UserResponse).IsAdmin {
+// 		c.JSON(http.StatusForbidden, gin.H{
+// 			"error": "Unauthorized",
+// 		})
+// 		return
+// 	}
+// 	var userAlreadyHasALocker models.Locker
+// }
