@@ -27,7 +27,7 @@ func RequireAuth(c *gin.Context) {
 
 			c.AbortWithStatus(http.StatusUnauthorized)
 
-			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
+			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}
 		return []byte(os.Getenv("SECRET")), nil
 	})
@@ -50,7 +50,7 @@ func RequireAuth(c *gin.Context) {
 			c.AbortWithStatus(http.StatusUnauthorized)
 
 		}
-		responseUser.Id, responseUser.Name, responseUser.Email, responseUser.IsAdmin = user.ID, user.Name, user.Email, user.IsAdmin
+		responseUser.ID, responseUser.Name, responseUser.Email, responseUser.IsAdmin = user.ID, user.Name, user.Email, user.IsAdmin
 		c.Set("user", responseUser)
 		c.Next()
 	} else {

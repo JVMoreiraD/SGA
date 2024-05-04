@@ -9,6 +9,7 @@ import (
 	"github.com/JVMoreiraD/SGA/models"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -18,6 +19,7 @@ func SignUp(c *gin.Context) {
 		Email    string
 		Password string
 		IsAdmin  bool
+		RoleID   uuid.UUID
 	}
 
 	if c.Bind(&body) != nil {
@@ -27,7 +29,7 @@ func SignUp(c *gin.Context) {
 		return
 	}
 
-	user, err := models.NewBaseUser(body.Name, body.Email, body.Password, body.IsAdmin)
+	user, err := models.NewBaseUser(body.Name, body.Email, body.Password, body.IsAdmin, body.RoleID)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "Failed to create user",
@@ -99,9 +101,10 @@ func GetUsers(c *gin.Context) {
 	}
 	var users []models.User
 	var usersResponse []models.UserResponse
-	initializers.DB.Find(&users)
+	initializers.DB.Preload("Roles").Find(&users)
 	for _, user := range users {
-		var temp = models.UserResponse{Id: user.ID, Name: user.Name, Email: user.Email, IsAdmin: user.IsAdmin}
+		var roleTemp = models.RolesResponse{ID: user.Roles.ID, RoleName: user.Roles.RoleName}
+		var temp = models.UserResponse{ID: user.ID, Name: user.Name, Email: user.Email, IsAdmin: user.IsAdmin, Role: roleTemp}
 		usersResponse = append(usersResponse, temp)
 	}
 	c.JSON(http.StatusOK, gin.H{
@@ -116,13 +119,24 @@ func Validate(c *gin.Context) {
 	})
 }
 
-// func AssignLockerToUser(c *gin.Context) {
-// 	user, _ := c.Get("user")
-// 	if !user.(models.UserResponse).IsAdmin {
-// 		c.JSON(http.StatusForbidden, gin.H{
-// 			"error": "Unauthorized",
-// 		})
-// 		return
-// 	}
-// 	var userAlreadyHasALocker models.Locker
-// }
+func AssignLockerToUser(c *gin.Context) {
+	user, _ := c.Get("user")
+	if !user.(models.UserResponse).IsAdmin {
+		c.JSON(http.StatusForbidden, gin.H{
+			"error": "Unauthorized",
+		})
+		return
+	}
+	var body struct {
+		UserID   uuid.UUID
+		LockerID uuid.UUID
+	}
+
+	if c.Bind(&body) != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "failed to read body",
+		})
+		return
+	}
+
+}

@@ -13,6 +13,7 @@ func init() {
 	initializers.SyncDatabase()
 }
 func main() {
+
 	r := gin.Default()
 
 	r.POST("/signup", controllers.SignUp)
