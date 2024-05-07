@@ -1,7 +1,6 @@
 package initializers
 
 import (
-	"fmt"
 	"os"
 
 	"gorm.io/driver/postgres"
@@ -14,7 +13,6 @@ func ConnectToDatabase() {
 	var err error
 
 	dsn := os.Getenv("DATABASE")
-	fmt.Println(dsn)
 	DB, err = gorm.Open(postgres.New(postgres.Config{
 		DSN:                  dsn,
 		PreferSimpleProtocol: true,
