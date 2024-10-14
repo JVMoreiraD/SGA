@@ -28,11 +28,25 @@ func SignUp(c *gin.Context) {
 		})
 		return
 	}
+	isRoleValid := initializers.DB.First(&models.Roles{}, "id = ?", body.RoleID)
+	if isRoleValid.Error != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "invalid role",
+		})
+		return
+	}
+	invalidEmail := initializers.DB.First(&models.User{}, "email = ?", body.Email)
+	if invalidEmail.RowsAffected == 1 {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "invalid email",
+		})
+		return
+	}
 
 	user, err := models.NewBaseUser(body.Name, body.Email, body.Password, body.IsAdmin, body.RoleID)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Failed to create user",
+			"error": "Invalid user data",
 		})
 	}
 	result := initializers.DB.Create(&user)
@@ -101,7 +115,7 @@ func GetUsers(c *gin.Context) {
 	}
 	var users []models.User
 	var usersResponse []models.UserResponse
-	initializers.DB.Preload("Roles").Find(&users)
+	initializers.DB.Preload("Roles").Preload("Locker").Preload("Locker.Key").Find(&users)
 	for _, user := range users {
 		var roleTemp = models.RolesResponse{ID: user.Roles.ID, RoleName: user.Roles.RoleName}
 		var temp = models.UserResponse{ID: user.ID, Name: user.Name, Email: user.Email, IsAdmin: user.IsAdmin, Role: roleTemp}
@@ -139,4 +153,21 @@ func AssignLockerToUser(c *gin.Context) {
 		return
 	}
 
+	var userReq models.User
+	var lockerReq models.Locker
+
+	initializers.DB.First(&userReq, "id = ?", body.UserID)
+	initializers.DB.Preload("Group").First(&lockerReq, "id = ?", body.LockerID)
+
+	if userReq.RoleID != lockerReq.Group.RoleID {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Locker and User doesn't belong to same group",
+		})
+		return
+	}
+
+	userReq.LockerID = &lockerReq.ID
+
+	initializers.DB.Save(&userReq)
+	c.JSON(http.StatusOK, gin.H{})
 }

@@ -12,9 +12,9 @@ type User struct {
 	Name     string
 	Email    string `gorm:"unique"`
 	Password string
-	IsAdmin  bool       `gorm:"default:False"`
-	RoleID   uuid.UUID  `gorm:"default:Null"`
-	Roles    Roles      `gorm:"foreignKey:RoleID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;default:null"`
+	IsAdmin  bool `gorm:"default:False"`
+	RoleID   uuid.UUID
+	Roles    Roles      `gorm:"foreignKey:RoleID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 	LockerID *uuid.UUID `gorm:"default:null"`
 	Locker   *Locker    `gorm:"foreignKey:LockerID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;default:null"`
 }
@@ -25,6 +25,7 @@ func (u *User) BeforeCreate(tx *gorm.DB) (err error) {
 	return
 }
 func NewBaseUser(name string, email string, password string, isAdmin bool, rolesID uuid.UUID) (*User, error) {
+
 	hash, err := bcrypt.GenerateFromPassword([]byte(password), 10)
 	if err != nil {
 		return &User{}, err
@@ -36,6 +37,5 @@ func NewBaseUser(name string, email string, password string, isAdmin bool, roles
 		Password: string(hash),
 		IsAdmin:  isAdmin,
 		RoleID:   rolesID,
-		// Roles:    role,
 	}, nil
 }
