@@ -20,3 +20,12 @@ func (u *LockerGroups) BeforeCreate(tx *gorm.DB) (err error) {
 
 	return
 }
+
+func NewLockerGroup(identification string, roleID uuid.UUID, description string) *LockerGroups {
+	return &LockerGroups{
+		ID:             uuid.New(),
+		Identification: identification,
+		Description:    description,
+		RoleID:         roleID,
+	}
+}
