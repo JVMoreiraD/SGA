@@ -7,8 +7,7 @@ import { Input } from "@/components/ui/input"
 import { z } from "zod"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { SelectContent, SelectGroup, SelectLabel, SelectTrigger, SelectValue } from "@radix-ui/react-select"
-import { Select, SelectItem } from "@/components/ui/select"
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useState } from "react"
 
 export function DialogDemo() {
@@ -88,7 +87,7 @@ export function DialogDemo() {
                                         <FormItem className="pb-4">
                                             <FormLabel>Email</FormLabel>
                                             <FormControl>
-                                                <Input placeholder="email@email.com" {...field} />
+                                                <Input placeholder="Insira o email" {...field} />
                                             </FormControl>
 
                                             <FormMessage />
@@ -97,7 +96,6 @@ export function DialogDemo() {
                                 }}
                             />
                             <FormField
-
                                 control={form.control}
                                 name="rolesEnum"
                                 render={({ field }) => {
@@ -108,22 +106,21 @@ export function DialogDemo() {
                                             </FormLabel>
                                             <br />
                                             <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                                <FormControl>
-                                                    <SelectTrigger className="w-[180px]" >
+                                                <FormControl >
+                                                    <SelectTrigger  >
                                                         <SelectValue placeholder="Selecione o grupo" />
                                                     </SelectTrigger>
                                                 </FormControl>
                                                 <SelectContent >
                                                     <SelectGroup>
-                                                        <SelectLabel>
-                                                            {
-                                                                roles.map((role) =>
-                                                                    <SelectItem key={role} value={role}>
-                                                                        {role}
-                                                                    </SelectItem>
-                                                                )
-                                                            }
-                                                        </SelectLabel>
+                                                        {
+                                                            roles.map((role) =>
+                                                                <SelectItem key={role} value={role}>
+                                                                    {role}
+                                                                </SelectItem>
+                                                            )
+                                                        }
+
                                                     </SelectGroup>
                                                 </SelectContent>
                                             </Select>

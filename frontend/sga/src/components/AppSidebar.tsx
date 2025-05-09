@@ -34,7 +34,7 @@ const items = [
     },
     {
         title: "Configurações",
-        url: "config",
+        url: "management",
         icon: Settings,
     }
 
