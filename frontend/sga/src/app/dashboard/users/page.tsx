@@ -1,14 +1,128 @@
 // 'use client'
-// import { Input } from "@/components/ui/input"
-import { DialogDemo } from "@/app/forms/dialog"
+// import { DialogDemo } from "@/app/forms/dialog"
 import { columns, User } from "./column"
 import { DataTable } from "./dataTable"
-import { InputDemo } from "@/components/Input"
+// import { InputSearchName } from "@/components/InputSearchName"
 
 
 async function getData(): Promise<User[]> {
     // Fetch data from your API here.
     return [
+        {
+            name: "joão vitor moreira duarte",
+            email: "vitor@gmail.com",
+            phone: "858012430",
+            role: "Admin"
+        },
+        {
+            name: "joão vitor de franca leitao",
+            email: "vitor@gmail.com",
+            phone: "858012430",
+            role: "Admin"
+        },
+        {
+            name: "joão vitor vasconselos do flamengo",
+            email: "vitor@gmail.com",
+            phone: "858012430",
+            role: "Admin"
+        },
+        {
+            name: "joão",
+            email: "vitor@gmail.com",
+            phone: "858012430",
+            role: "Admin"
+        },
+        {
+            name: "joão",
+            email: "vitor@gmail.com",
+            phone: "858012430",
+            role: "Admin"
+        },
+        {
+            name: "joão",
+            email: "vitor@gmail.com",
+            phone: "858012430",
+            role: "Admin"
+        }, {
+            name: "joão",
+            email: "vitor@gmail.com",
+            phone: "858012430",
+            role: "Admin"
+        },
+        {
+            name: "joão",
+            email: "vitor@gmail.com",
+            phone: "858012430",
+            role: "Admin"
+        },
+        {
+            name: "joão",
+            email: "vitor@gmail.com",
+            phone: "858012430",
+            role: "Admin"
+        }, {
+            name: "joão",
+            email: "vitor@gmail.com",
+            phone: "858012430",
+            role: "Admin"
+        },
+        {
+            name: "joão",
+            email: "vitor@gmail.com",
+            phone: "858012430",
+            role: "Admin"
+        },
+        {
+            name: "joão",
+            email: "vitor@gmail.com",
+            phone: "858012430",
+            role: "Admin"
+        }, {
+            name: "joão",
+            email: "vitor@gmail.com",
+            phone: "858012430",
+            role: "Admin"
+        },
+        {
+            name: "joão",
+            email: "vitor@gmail.com",
+            phone: "858012430",
+            role: "Admin"
+        },
+        {
+            name: "joão",
+            email: "vitor@gmail.com",
+            phone: "858012430",
+            role: "Admin"
+        }, {
+            name: "joão",
+            email: "vitor@gmail.com",
+            phone: "858012430",
+            role: "Admin"
+        },
+        {
+            name: "joão",
+            email: "vitor@gmail.com",
+            phone: "858012430",
+            role: "Admin"
+        },
+        {
+            name: "joão",
+            email: "vitor@gmail.com",
+            phone: "858012430",
+            role: "Admin"
+        }, {
+            name: "joão",
+            email: "vitor@gmail.com",
+            phone: "858012430",
+            role: "Admin"
+        },
+        {
+            name: "joão",
+            email: "vitor@gmail.com",
+            phone: "858012430",
+            role: "Admin"
+        },
         {
             name: "joão",
             email: "vitor@gmail.com",
@@ -21,19 +135,10 @@ async function getData(): Promise<User[]> {
 export default async function DemoPage() {
     const data = await getData()
     return (
-        <div className="w-full">
+        <div className="w-full flex items-center justify-center">
 
-            <div className="flex justify-center items-start py-4 gap-x-14">
-                <InputDemo />
-                <DialogDemo />
-            </div>
+            <DataTable columns={columns} data={data} />
 
-            <div className="flex items-center justify-center">
-
-
-                <DataTable columns={columns} data={data} />
-
-            </div>
         </div>
 
     )
