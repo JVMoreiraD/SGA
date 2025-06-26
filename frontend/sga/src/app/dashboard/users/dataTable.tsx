@@ -1,5 +1,5 @@
 'use client'
-import { DialogDemo } from "@/app/forms/dialog";
+import { NewUserDialog } from "@/app/forms/NewUserDialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -44,7 +44,7 @@ export function DataTable<TData, TValue>({
                     }
                     className="max-w-sm"
                 />
-                <DialogDemo />
+                <NewUserDialog />
             </div>
 
             <div className="rounded-md border">
@@ -98,7 +98,7 @@ export function DataTable<TData, TValue>({
                     onClick={() => table.previousPage()}
                     disabled={!table.getCanPreviousPage()}
                 >
-                    Previous
+                    Anterior
                 </Button>
                 <Button
                     variant="outline"
@@ -106,7 +106,7 @@ export function DataTable<TData, TValue>({
                     onClick={() => table.nextPage()}
                     disabled={!table.getCanNextPage()}
                 >
-                    Next
+                    Proximo
                 </Button>
             </div>
         </div>
