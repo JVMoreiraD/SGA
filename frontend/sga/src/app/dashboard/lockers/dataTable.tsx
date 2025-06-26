@@ -23,7 +23,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import React from "react"
-import { NewGroupDialog } from "@/app/forms/NewGroupDialog"
+import { NewLockerDialog } from "@/app/forms/NewLockerDialog"
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
@@ -63,7 +63,7 @@ export function DataTable<TData, TValue>({
                     }
                     className="max-w-sm"
                 />
-                <NewGroupDialog />
+                <NewLockerDialog />
             </div>
             <div className="rounded-md border">
 

@@ -1,12 +1,11 @@
 'use client'
 import { Button } from "@/components/ui/button"
-import { PlusIcon } from "lucide-react"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { z } from "zod"
 import { useState } from "react"
-import { NewLockerForm, formSchema } from "./NewLockerForm"
+import { BookKeyForm, formSchema } from "./BookKeyForm"
 
-export function NewLockerDialog() {
+export function BookKeyDialog() {
     const [dialogIsOpen, setIsDialogOpen] = useState(false)
 
 
@@ -18,21 +17,21 @@ export function NewLockerDialog() {
         <Dialog open={dialogIsOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
                 <Button variant="outline">
-                    <PlusIcon />
-                    Novo Armário
+                    Reservar
+                    Armário
                 </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-lg">
+            <DialogContent className="max-w-fit">
 
                 <DialogHeader>
                     <DialogTitle>
-                        Adicionar novo Armário
+                        Reserve o Armário
                     </DialogTitle>
                     <DialogDescription>
-                        Preencha as informações para o novo armário
+                        Selecione o usuário e a chave
                     </DialogDescription>
                 </DialogHeader>
-                <NewLockerForm
+                <BookKeyForm
                     onSubmit={handleSubmit}
                     onCancel={() => setIsDialogOpen(false)}
                 />
