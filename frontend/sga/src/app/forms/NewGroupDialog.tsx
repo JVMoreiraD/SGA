@@ -4,9 +4,9 @@ import { PlusIcon } from "lucide-react"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { z } from "zod"
 import { useState } from "react"
-import { NewUserForm, formSchema } from "./newUserForm"
+import { formSchema, NewGroupForm } from "./NewGroupForm"
 
-export function DialogDemo() {
+export function NewGroupDialog() {
     const [dialogIsOpen, setIsDialogOpen] = useState(false)
 
 
@@ -19,20 +19,20 @@ export function DialogDemo() {
             <DialogTrigger asChild>
                 <Button variant="outline">
                     <PlusIcon />
-                    Novo Usuário
+                    Novo Grupo
                 </Button>
             </DialogTrigger>
             <DialogContent className="max-w-fit">
 
                 <DialogHeader>
                     <DialogTitle>
-                        Adicionar novo Usuário
+                        Adicionar novo Grupo
                     </DialogTitle>
                     <DialogDescription>
-                        Preencha as informações com os dados do novo usuário
+                        Preencha as informações para o novo grupo de usuários
                     </DialogDescription>
                 </DialogHeader>
-                <NewUserForm
+                <NewGroupForm
                     onSubmit={handleSubmit}
                     onCancel={() => setIsDialogOpen(false)}
                 />
