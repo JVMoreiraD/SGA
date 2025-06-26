@@ -5,79 +5,58 @@ async function getData(): Promise<Key[]> {
     // Fetch data from your API here.
     return [
         {
-            id: "728ed52f",
-            status: "available",
-            block: '01',
-            locker: '03'
+            id: "2686",
+            quantity: 3
         },
         {
-            id: "728ed52f",
-            status: "available",
-            block: '01',
-            locker: '03'
+            id: "2686",
+            quantity: 3
         }, {
-            id: "728ed52f",
-            status: "available",
-            block: '01',
-            locker: '03'
+            id: "2686",
+            quantity: 3
         }, {
-            id: "728ed52f",
-            status: "available",
-            block: '01',
-            locker: '03'
+            id: "2686",
+            quantity: 3
         }, {
-            id: "728ed52f",
-            status: "available",
-            block: '01',
-            locker: '03'
+            id: "2686",
+            quantity: 3
         }, {
-            id: "728ed52f",
-            status: "available",
-            block: '01',
-            locker: '03'
+            id: "2686",
+            quantity: 3
         }, {
-            id: "728ed52f",
-            status: "available",
-            block: '01',
-            locker: '03'
+            id: "2686",
+            quantity: 3
         }, {
-            id: "728ed52f",
-            status: "available",
-            block: '01',
-            locker: '03'
+            id: "2686",
+            quantity: 3
         }, {
-            id: "728ed52f",
-            status: "available",
-            block: '01',
-            locker: '03'
+            id: "2686",
+            quantity: 3
         }, {
-            id: "728ed52f",
-            status: "available",
-            block: '01',
-            locker: '03'
+            id: "2686",
+            quantity: 3
         }, {
-            id: "728ed52f",
-            status: "available",
-            block: '01',
-            locker: '03'
+            id: "2686",
+            quantity: 3
         },
         {
-            id: "728ed52f",
-            status: "available",
-            block: '01',
-            locker: '03'
+            id: "2686",
+            quantity: 3
+        },
+        {
+            id: "2686",
+            quantity: 3
         }
-
         // ...
     ]
 }
 
-export default async function DemoPage() {
+export default async function KeysPage() {
     const data = await getData()
 
     return (
-        <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
-            <div className="w-full max-w-sm">
+        <div className="flex items-center justify-center">
+            <div className="w-full max-w-screen-md">
                 <DataTable columns={columns} data={data} />
 
             </div>
