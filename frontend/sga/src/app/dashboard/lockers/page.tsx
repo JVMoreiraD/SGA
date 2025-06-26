@@ -1,11 +1,37 @@
-import { CarouselSize } from "@/components/CorouselSize";
+import { columns, Locker } from "./column"
+import { DataTable } from "./dataTable"
 
-export default function Lockers() {
-    return (
-        <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
-            <div className="w-full max-w-sm">
-                <CarouselSize />
-            </div>
-        </div>
-    );
+async function getData(): Promise<Locker[]> {
+    // Fetch data from your API here.
+    return [
+        {
+            Name: "Armário 3",
+            Description: "Armário do bloco 3, corredor direito, primeiro andar",
+            Capacity: "3",
+
+            Group: "Alunos"
+        },
+        {
+            Name: "Armário 5",
+            Description: "Armário do bloco 3, corredor esquerdo, segundo andar",
+            Capacity: "3/9",
+            Group: "Alunos"
+        }, {
+            Name: "Armário 4",
+            Description: "Armário do bloco 3, corredor direito, primeiro andar",
+            Capacity: "3/9",
+            Group: "Alunos"
+        }
+    ]
 }
+export default async function LockersPage() {
+    const data = await getData()
+    console.log(data)
+    return (
+        <div className="w-full flex items-center justify-center">
+            <DataTable columns={columns} data={data} />
+
+        </div>
+    )
+}
+
