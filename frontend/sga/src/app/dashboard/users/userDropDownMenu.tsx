@@ -12,7 +12,7 @@ import {
     DropdownMenuGroup
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button";
-import { EditIcon, MoreHorizontal } from "lucide-react";
+import { EditIcon, MoreHorizontal, Trash2Icon } from "lucide-react";
 
 interface IUserDropdown {
     user: User
@@ -48,10 +48,10 @@ export function UserDropdown({ user }: IUserDropdown) {
                             <EditIcon />
                             Editar
                         </DropdownMenuItem>
-                        {/* <DropdownMenuItem onSelect={() => setDialogMenu("delete")}>
-<Trash2Icon />
-Deletar
-</DropdownMenuItem> */}
+                        <DropdownMenuItem onSelect={() => setDialogMenu("delete")}>
+                            <Trash2Icon />
+                            Deletar
+                        </DropdownMenuItem>
                     </DropdownMenuGroup>
                 </DropdownMenuContent>
             </DropdownMenu>

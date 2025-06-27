@@ -37,9 +37,9 @@ export function EditUserForm({ onSubmit, onCancel, user }: UserFormProps) {
         resolver: zodResolver(formSchema),
         defaultValues: {
             name: user.name,
-            email: "",
-            phone: "",
-            // rolesEnum: user.role,
+            email: user.email,
+            phone: user.phone,
+            // rolesEnum: roles ==user.role,
         },
     })
 
