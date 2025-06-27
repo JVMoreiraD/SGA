@@ -1,13 +1,13 @@
-import { Button } from "@/components/ui/button"
+// import { Button } from "@/components/ui/button"
 import {
-    Dialog,
+    // Dialog,
     DialogContent,
     DialogDescription,
     DialogHeader,
     DialogTitle,
-    DialogTrigger,
+    // DialogTrigger,
 } from "@/components/ui/dialog"
-import { EditIcon } from "lucide-react"
+// import { EditIcon } from "lucide-react"
 import { z } from "zod"
 
 import { EditUserForm, formSchema } from "./EditUserForm"
@@ -22,10 +22,10 @@ export type User = {
 
 interface EditUSerDialogProps {
     user: User
+    setDialogMenu: (menu: string) => void
 }
-export function EditUserDialog({ user }: EditUSerDialogProps) {
-    const [dialogIsOpen, setIsDialogOpen] = useState(false)
-
+export function EditUserDialog({ user, setDialogMenu }: EditUSerDialogProps) {
+    const [, setIsDialogOpen] = useState(false)
 
     function handleSubmit(values: z.infer<typeof formSchema>) {
         setIsDialogOpen(false)
@@ -33,31 +33,21 @@ export function EditUserDialog({ user }: EditUSerDialogProps) {
     }
     console.log(user)
     return (
-        <Dialog open={dialogIsOpen} onOpenChange={setIsDialogOpen}>
-            <form>
-                <DialogTrigger asChild>
-                    <Button variant="ghost" className="flex justify-start">
-                        <EditIcon />
-                        Editar
-                    </Button>
-                </DialogTrigger>
-                <DialogContent className="sm:max-w-[425px]">
-                    <DialogHeader>
-                        <DialogTitle>
-                            Adicionar novo Usuário
-                        </DialogTitle>
-                        <DialogDescription>
-                            Preencha as informações com os dados do novo usuário
-                        </DialogDescription>
-                    </DialogHeader>
-                    <EditUserForm
-                        user={user}
-                        onSubmit={handleSubmit}
-                        onCancel={() => setIsDialogOpen(false)}
+        <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+                <DialogTitle>
+                    Adicionar novo Usuário
+                </DialogTitle>
+                <DialogDescription>
+                    Preencha as informações com os dados do novo usuário
+                </DialogDescription>
+            </DialogHeader>
+            <EditUserForm
+                user={user}
+                onSubmit={handleSubmit}
+                onCancel={() => setDialogMenu("none")}
 
-                    />
-                </DialogContent>
-            </form>
-        </Dialog>
+            />
+        </DialogContent>
     )
 }

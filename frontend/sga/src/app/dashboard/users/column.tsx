@@ -1,12 +1,13 @@
 "use client"
 
 
-import { EditUserDialog } from "@/app/forms/EditUserDialog"
-import { DeleteDialog } from "@/components/DeleteDialog"
+// import { EditUserDialog } from "@/app/forms/EditUserDialog"
+// import { DeleteDialog } from "@/components/DeleteDialog"
 import { Button } from "@/components/ui/button"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+// import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { ColumnDef } from "@tanstack/react-table"
-import { ArrowUpDown, MoreHorizontal } from "lucide-react"
+import { ArrowUpDown } from "lucide-react" //MoreHorizontal
+import { UserDropdown } from "./userDropDownMenu"
 
 
 export type User = {
@@ -52,25 +53,26 @@ export const columns: ColumnDef<User>[] = [
         cell: ({ row }) => {
 
             return (
-                <DropdownMenu >
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0">
-                            <span className="sr-only">Open menu</span>
-                            <MoreHorizontal />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Ações</DropdownMenuLabel>
-                        <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                            <EditUserDialog user={{ email: row.getValue("email"), name: row.getValue("name"), phone: row.getValue("phone"), role: row.getValue("role") }} />
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                            <DeleteDialog />
-                        </DropdownMenuItem>
+                <UserDropdown user={{ email: row.getValue("email"), name: row.getValue("name"), phone: row.getValue("phone"), role: row.getValue("role") }} />
+                // <DropdownMenu >
+                //     <DropdownMenuTrigger asChild>
+                //         <Button variant="ghost" className="h-8 w-8 p-0">
+                //             <span className="sr-only">Open menu</span>
+                //             <MoreHorizontal />
+                //         </Button>
+                //     </DropdownMenuTrigger>
+                //     <DropdownMenuContent align="end">
+                //         <DropdownMenuLabel>Ações</DropdownMenuLabel>
+                //         <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                //             <EditUserDialog user={{ email: row.getValue("email"), name: row.getValue("name"), phone: row.getValue("phone"), role: row.getValue("role") }} />
+                //         </DropdownMenuItem>
+                //         <DropdownMenuSeparator />
+                //         <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                //             <DeleteDialog />
+                //         </DropdownMenuItem>
 
-                    </DropdownMenuContent>
-                </DropdownMenu>
+                //     </DropdownMenuContent>
+                // </DropdownMenu>
             )
         },
     },
