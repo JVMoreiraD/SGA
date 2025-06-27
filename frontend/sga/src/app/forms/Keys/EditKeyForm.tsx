@@ -80,7 +80,7 @@ export function EditKeyForm({ onSubmit, onCancel, keyProps }: UserFormProps) {
                         <Button variant="secondary" onClick={onCancel} type="button">
                             Cancelar
                         </Button>
-                        <Button type="submit">Cadastrar</Button>
+                        <Button type="submit">Salvar</Button>
                     </div>
                 </fieldset>
             </form>

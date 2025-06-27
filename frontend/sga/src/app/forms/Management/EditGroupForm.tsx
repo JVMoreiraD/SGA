@@ -4,7 +4,7 @@ import { z } from "zod"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "@/components/ui/button"
-import { Group } from "../dashboard/management/columns"
+import { Group } from "@/app/dashboard/management/columns"
 
 
 export const formSchema = z.object({
@@ -77,7 +77,7 @@ export function EditGroupForm({ onSubmit, onCancel, groupProps }: UserFormProps)
                         <Button variant="secondary" onClick={onCancel} type="button">
                             Cancelar
                         </Button>
-                        <Button type="submit">Cadastrar</Button>
+                        <Button type="submit">Salvar</Button>
                     </div>
                 </fieldset>
             </form>

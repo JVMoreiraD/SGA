@@ -39,7 +39,7 @@ export function EditUserForm({ onSubmit, onCancel, user }: UserFormProps) {
             name: user.name,
             email: user.email,
             phone: user.phone,
-            // rolesEnum: roles ==user.role,
+            // rolesEnum: (),
         },
     })
 
@@ -136,7 +136,7 @@ export function EditUserForm({ onSubmit, onCancel, user }: UserFormProps) {
                         <Button variant="secondary" onClick={onCancel} type="button">
                             Cancelar
                         </Button>
-                        <Button type="submit">Cadastrar</Button>
+                        <Button type="submit">Salvar</Button>
                     </div>
                 </fieldset>
             </form>
