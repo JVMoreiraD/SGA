@@ -33,7 +33,7 @@ export function EditKeyDialog({ keyProps, setDialogMenu }: EditKeyDialogProps) {
                     Editar informações da chave
                 </DialogTitle>
                 <DialogDescription>
-                    Preencha as informações com os dados do novo usuário
+                    Edite a identificação da chave ou sua quantidade
                 </DialogDescription>
             </DialogHeader>
             <EditKeyForm

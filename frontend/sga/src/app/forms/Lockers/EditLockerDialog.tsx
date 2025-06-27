@@ -34,10 +34,10 @@ export function EditLockerDialog({ locker, setDialogMenu }: EditLockerDialogProp
         <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
                 <DialogTitle>
-                    Adicionar novo Usuário
+                    Edite o armário.
                 </DialogTitle>
                 <DialogDescription>
-                    Preencha as informações com os dados do novo usuário
+                    Faça as alterações desejadas no armário.
                 </DialogDescription>
             </DialogHeader>
             <EditLockerForm

@@ -36,10 +36,10 @@ export function EditUserDialog({ user, setDialogMenu }: EditUSerDialogProps) {
         <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
                 <DialogTitle>
-                    Adicionar novo Usuário
+                    Edição de Usuário
                 </DialogTitle>
                 <DialogDescription>
-                    Preencha as informações com os dados do novo usuário
+                    Altere as informações necessárias do usuário
                 </DialogDescription>
             </DialogHeader>
             <EditUserForm
