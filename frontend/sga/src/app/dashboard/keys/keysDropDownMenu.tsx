@@ -12,7 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { EditIcon, MoreHorizontal, Trash2Icon } from "lucide-react";
 import { Key } from "./columns";
-import { EditKeyDialog } from "@/app/forms/EditKeyDialog";
+import { EditKeyDialog } from "@/app/forms/Keys/EditKeyDialog";
 
 interface IKeyDropdown {
     keyProps: Key

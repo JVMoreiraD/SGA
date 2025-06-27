@@ -23,7 +23,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import React from "react"
-import { NewLockerDialog } from "@/app/forms/NewLockerDialog"
+import { NewLockerDialog } from "@/app/forms/Lockers/NewLockerDialog"
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]

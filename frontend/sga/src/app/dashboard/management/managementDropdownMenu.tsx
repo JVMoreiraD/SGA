@@ -12,7 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { EditIcon, MoreHorizontal, Trash2Icon } from "lucide-react";
 import { Group } from "./columns";
-import { EditGroupDialog } from "@/app/forms/EditGroupDialog";
+import { EditGroupDialog } from "@/app/forms/Management/EditGroupDialog";
 
 interface IGroupDropdown {
     groupProps: Group

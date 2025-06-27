@@ -1,5 +1,5 @@
 'use client'
-import { NewUserDialog } from "@/app/forms/NewUserDialog";
+import { NewUserDialog } from "@/app/forms/Users/NewUserDialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";

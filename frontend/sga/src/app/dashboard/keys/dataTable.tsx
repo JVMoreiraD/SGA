@@ -21,7 +21,7 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import { Input } from "@/components/ui/input"
-import { NewKeyDialog } from "@/app/forms/NewKeyDialog"
+import { NewKeyDialog } from "@/app/forms/Keys/NewKeyDialog"
 import { Button } from "@/components/ui/button"
 import React from "react"
 

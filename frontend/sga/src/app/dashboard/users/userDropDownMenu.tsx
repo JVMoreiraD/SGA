@@ -1,4 +1,4 @@
-import { EditUserDialog } from "@/app/forms/EditUserDialog";
+import { EditUserDialog } from "@/app/forms/Users/EditUserDialog";
 import { DeleteDialog } from "@/components/DeleteDialog";
 import { JSX, useMemo, useState } from "react";
 import { User } from "./column";

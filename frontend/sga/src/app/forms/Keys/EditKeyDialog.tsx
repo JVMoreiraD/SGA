@@ -10,7 +10,7 @@ import {
 import { z } from "zod"
 
 import { useState } from "react"
-import { Key } from "../dashboard/keys/columns"
+import { Key } from "../../dashboard/keys/columns"
 import { EditKeyForm, formSchema } from "./EditKeyForm"
 
 

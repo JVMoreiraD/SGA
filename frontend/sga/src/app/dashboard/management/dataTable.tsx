@@ -23,7 +23,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import React from "react"
-import { NewGroupDialog } from "@/app/forms/NewGroupDialog"
+import { NewGroupDialog } from "@/app/forms/Management/NewGroupDialog"
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]

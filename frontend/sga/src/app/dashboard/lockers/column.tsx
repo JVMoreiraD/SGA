@@ -1,6 +1,6 @@
 "use client"
 
-import { BookKeyDialog } from "@/app/forms/BookKeyDialog"
+import { BookKeyDialog } from "@/app/forms/Lockers/BookKeyDialog"
 import { ColumnDef } from "@tanstack/react-table"
 import { LockerDropDown } from "./lockersDropDown"
 

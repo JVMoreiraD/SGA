@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button";
 import { EditIcon, MoreHorizontal, Trash2Icon } from "lucide-react";
-import { EditLockerDialog } from "@/app/forms/EditLockerDialog";
+import { EditLockerDialog } from "@/app/forms/Lockers/EditLockerDialog";
 
 type Locker = {
     Name: string;
