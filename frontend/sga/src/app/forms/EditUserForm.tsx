@@ -5,69 +5,43 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
-import MultipleSelector, { Option } from '@/components/ui/multiple-selector';
-import React from "react"
+import { User } from "./EditUserDialog"
 
 
 const roles = ["Professores", "Aluno", "Terceirizados"] as const;
-const optionsKeysSchema = z.object({
-    label: z.string(),
-    value: z.string(),
-    disable: z.boolean().optional()
-})
+const phoneRegex = new RegExp(
+    /^1\d\d(\d\d)?$|^0800 ?\d{3} ?\d{4}$|^(\(0?([1-9a-zA-Z][0-9a-zA-Z])?[1-9]\d\) ?|0?([1-9a-zA-Z][0-9a-zA-Z])?[1-9]\d[ .-]?)?(9|9[ .-])?[2-9]\d{3}[ .-]?\d{4}$/gm
+);
+
 export const formSchema = z.object({
     name: z.string().min(2, {
         message: "Coloque o nome completo",
     }),
-    description: z.string().email({
+    email: z.string().email({
         message: "Email invalido"
     }),
-    keys: z.array(optionsKeysSchema).min(1),
+    phone: z.string().regex(phoneRegex, 'numero invalido'),
     rolesEnum: z.enum(roles)
 
 })
 
-const OPTIONS: Option[] = [
-    { label: 'nextjs', value: 'nextjs', group: 'React' },
-    { label: 'React', value: 'react', group: 'React' },
-    { label: 'Remix', value: 'remix', group: 'React' },
-    { label: 'shadcn-ui', value: 'shadcn-ui', group: 'React' },
-    { label: 'mui', value: 'mui', group: 'React' },
-    { label: 'Vite', value: 'vite', group: 'Vue' },
-    { label: 'Nuxt', value: 'nuxt', group: 'Vue' },
-    { label: 'Vue', value: 'vue', group: 'Vue' },
-    { label: 'Quasar', value: 'quasar', group: 'Vue' },
-    { label: 'Angular', value: 'angular', group: 'Angular' },
-    { label: 'Material UI', value: 'material-ui', group: 'Angular' },
-    { label: 'Ng-zorro', value: 'ng-zorro', group: 'Angular' },
-];
-
-const mockSearch = async (value: string): Promise<Option[]> => {
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            const res = OPTIONS.filter((option) => option.value.includes(value));
-            resolve(res);
-        }, 1000);
-    });
-};
-
 type UserFormProps = {
     onSubmit: (values: z.infer<typeof formSchema>) => void
     onCancel: () => void
+    user: User
 }
 
-export function NewLockerForm({ onSubmit, onCancel }: UserFormProps) {
+export function EditUserForm({ onSubmit, onCancel, user }: UserFormProps) {
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             name: "",
-            description: "",
-            keys: []
-
+            email: "",
+            phone: "",
+            // rolesEnum: user.role,
         },
     })
-    const [, setIsTriggered] = React.useState(false);
 
     return (
         <Form {...form} >
@@ -79,9 +53,9 @@ export function NewLockerForm({ onSubmit, onCancel }: UserFormProps) {
                         render={({ field }) => {
                             return (
                                 <FormItem className="py-4">
-                                    <FormLabel>Identificação do armário</FormLabel>
+                                    <FormLabel>Nome Completo</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Insira a identificação do armário" {...field} />
+                                        <Input placeholder="Nome" {...field} />
                                     </FormControl>
 
                                     <FormMessage />
@@ -92,13 +66,13 @@ export function NewLockerForm({ onSubmit, onCancel }: UserFormProps) {
                     />
                     <FormField
                         control={form.control}
-                        name="description"
+                        name="phone"
                         render={({ field }) => {
                             return (
                                 <FormItem className="py-4">
-                                    <FormLabel>Descrição do armário</FormLabel>
+                                    <FormLabel>Telefone</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Descrição da localização" {...field} />
+                                        <Input placeholder="Telefone" {...field} />
                                     </FormControl>
 
                                     <FormMessage />
@@ -110,32 +84,13 @@ export function NewLockerForm({ onSubmit, onCancel }: UserFormProps) {
                     <FormField
 
                         control={form.control}
-                        name="keys"
-                        render={({}) => {
+                        name="email"
+                        render={({ field }) => {
                             return (
                                 <FormItem className="pb-4">
-                                    <FormLabel>Chaves</FormLabel>
+                                    <FormLabel>Email</FormLabel>
                                     <FormControl>
-                                        <MultipleSelector
-                                            onSearch={async (value) => {
-                                                setIsTriggered(true);
-                                                const res = await mockSearch(value);
-                                                setIsTriggered(false);
-                                                return res;
-                                            }}
-
-                                            defaultOptions={[]}
-                                            placeholder="Busque por chaves"
-                                            loadingIndicator={
-                                                <p className="py-2 text-center text-lg leading-10 text-muted-foreground">Carregando....</p>
-                                            }
-                                            emptyIndicator={
-                                                <p className="w-full text-center text-lg leading-10 text-muted-foreground">
-                                                    Sem resultados
-                                                </p>
-                                            }
-                                        />
-
+                                        <Input placeholder="Insira o email" {...field} />
                                     </FormControl>
 
                                     <FormMessage />

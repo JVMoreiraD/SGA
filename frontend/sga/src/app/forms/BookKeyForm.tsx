@@ -1,24 +1,21 @@
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
 import { z } from "zod"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "@/components/ui/button"
 import React from "react"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
-import { cn } from "@/lib/utils"
-import { Check, ChevronsUpDown } from "lucide-react"
+import MultipleSelector, { Option } from "@/components/ui/multiple-selector"
 
 
+const optionsKeysSchema = z.object({
+    label: z.string(),
+    value: z.string(),
+    disable: z.boolean().optional()
+})
 export const formSchema = z.object({
-    user: z.string().min(2, {
-        message: "Insira o nome do aluno",
-    }),
-    key: z.string().min(1, {
-        message: "Insira a identificação da chave",
-    }),
+    user: z.string(optionsKeysSchema).max(1),
 
+    keys: z.string(optionsKeysSchema).max(1),
 })
 
 type UserFormProps = {
@@ -26,42 +23,64 @@ type UserFormProps = {
     onCancel: () => void
 }
 
-type Status = {
-    value: string
-    label: string
-}
-const statuses: Status[] = [
-    {
-        value: "backlog",
-        label: "Backlog",
-    },
-    {
-        value: "todo",
-        label: "Todo",
-    },
-    {
-        value: "in progress",
-        label: "In Progress",
-    },
-    {
-        value: "done",
-        label: "Done",
-    },
-    {
-        value: "canceled",
-        label: "Canceled",
-    },
-]
+const OPTIONSKey: Option[] = [
+    { label: '26153', value: '26153' },
+    { label: 'React', value: 'react' },
+    { label: 'Remix', value: 'remix' },
+    { label: 'shadcn-ui', value: 'shadcn-ui' },
+    { label: 'mui', value: 'mui' },
+    { label: 'Vite', value: 'vite' },
+    { label: 'Nuxt', value: 'nuxt' },
+    { label: 'Vue', value: 'vue' },
+    { label: 'Quasar', value: 'quasar' },
+    { label: 'Angular', value: 'angular' },
+    { label: 'Material UI', value: 'material-ui' },
+    { label: 'Ng-zorro', value: 'ng-zorro' },
+];
+
+const mockSearchKey = async (value: string): Promise<Option[]> => {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            const res = OPTIONSKey.filter((option) => option.value.includes(value));
+            resolve(res);
+        }, 1000);
+    });
+};
+
+
+const OPTIONSUser: Option[] = [
+    { label: '26153', value: '26153' },
+    { label: 'React', value: 'react' },
+    { label: 'Remix', value: 'remix' },
+    { label: 'shadcn-ui', value: 'shadcn-ui' },
+    { label: 'mui', value: 'mui' },
+    { label: 'Vite', value: 'vite' },
+    { label: 'Nuxt', value: 'nuxt' },
+    { label: 'Vue', value: 'vue' },
+    { label: 'Quasar', value: 'quasar' },
+    { label: 'Angular', value: 'angular' },
+    { label: 'Material UI', value: 'material-ui' },
+    { label: 'Ng-zorro', value: 'ng-zorro' },
+];
+
+const mockSearchUser = async (value: string): Promise<Option[]> => {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            const res = OPTIONSUser.filter((option) => option.value.includes(value));
+            resolve(res);
+        }, 1000);
+    });
+};
+
 export function BookKeyForm({ onSubmit, onCancel }: UserFormProps) {
-    // const [open, setOpen] = React.useState(false)
-    // const [selectedStatus, setSelectedStatus] = React.useState<Status | null>(
-    //     null
-    // )
+
+    const [, setIsTriggered] = React.useState(false);
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             user: "",
-            key: "",
+            keys: "",
         },
     })
 
@@ -70,95 +89,78 @@ export function BookKeyForm({ onSubmit, onCancel }: UserFormProps) {
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                 <fieldset className="flex-row" >
                     <FormField
+
                         control={form.control}
                         name="user"
-                        render={({ field }) => {
+                        render={({}) => {
                             return (
-                                <FormItem className="py-2">
-                                    <FormLabel>Nome Do Usuário</FormLabel>
+                                <FormItem className="pb-4">
+                                    <FormLabel>Nome do usuário</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Nome do usuário" {...field} />
+                                        <MultipleSelector
+                                            maxSelected={1}
+                                            onSearch={async (value) => {
+                                                setIsTriggered(true);
+                                                const res = await mockSearchUser(value);
+                                                setIsTriggered(false);
+                                                return res;
+                                            }}
+
+                                            defaultOptions={[]}
+                                            placeholder="Busque pelo usuário"
+                                            loadingIndicator={
+                                                <p className="py-2 text-center text-lg leading-10 text-muted-foreground">Carregando....</p>
+                                            }
+                                            emptyIndicator={
+                                                <p className="w-full text-center text-lg leading-10 text-muted-foreground">
+                                                    Sem resultados
+                                                </p>
+                                            }
+                                        />
+
                                     </FormControl>
 
                                     <FormMessage />
                                 </FormItem>
                             )
                         }}
-
                     />
                     <FormField
+
                         control={form.control}
-                        name="key"
-                        render={({ field }) => {
+                        name="keys"
+                        render={({}) => {
                             return (
-                                <FormItem className="py-4">
-                                    <FormLabel>Chave</FormLabel>
+                                <FormItem className="pb-4">
+                                    <FormLabel>Identificação da chave disponível</FormLabel>
                                     <FormControl>
-                                        <Popover>
-                                            <PopoverTrigger asChild>
-                                                <FormControl>
-                                                    <Button
-                                                        variant={"outline"}
-                                                        role="combobox"
-                                                        className={cn(
-                                                            "w-[200px] justify-between",
-                                                            !field.value && "text-muted-foreground"
-                                                        )}
-                                                    >
-                                                        {field.value
-                                                            ? statuses.find(
-                                                                (language) => language.value === field.value
-                                                            )?.label
-                                                            : "Select language"}
-                                                        <ChevronsUpDown className="opacity-50" />
+                                        <MultipleSelector
+                                            maxSelected={1}
+                                            onSearch={async (value) => {
+                                                setIsTriggered(true);
+                                                const res = await mockSearchKey(value);
+                                                setIsTriggered(false);
+                                                return res;
+                                            }}
 
-                                                    </Button>
-                                                </FormControl>
+                                            defaultOptions={[]}
+                                            placeholder="Busque por chaves"
+                                            loadingIndicator={
+                                                <p className="py-2 text-center text-lg leading-10 text-muted-foreground">Carregando....</p>
+                                            }
+                                            emptyIndicator={
+                                                <p className="w-full text-center text-lg leading-10 text-muted-foreground">
+                                                    Sem resultados
+                                                </p>
+                                            }
+                                        />
 
-                                            </PopoverTrigger>
-                                            <PopoverContent className="w-[200px] p-0">
-                                                <Command>
-                                                    <CommandInput
-                                                        placeholder="Search framework..."
-                                                        className="h-9"
-                                                    />
-                                                    <CommandList>
-                                                        <CommandEmpty>No framework found.</CommandEmpty>
-                                                        <CommandGroup>
-                                                            {statuses.map((language) => (
-                                                                <CommandItem
-                                                                    value={language.label}
-                                                                    key={language.value}
-                                                                    onSelect={() => {
-                                                                        form.setValue("key", language.value)
-                                                                    }}
-                                                                >
-                                                                    <>
-                                                                        {language.label}
-                                                                        <Check
-                                                                            className={cn(
-                                                                                "ml-auto",
-                                                                                language.value === field.value
-                                                                                    ? "opacity-100"
-                                                                                    : "opacity-0"
-                                                                            )}
-                                                                        />
-                                                                    </>
-
-                                                                </CommandItem>
-                                                            ))}
-                                                        </CommandGroup>
-                                                    </CommandList>
-                                                </Command>
-                                            </PopoverContent>
-                                        </Popover>
                                     </FormControl>
 
                                     <FormMessage />
                                 </FormItem>
                             )
                         }}
-
                     />
 
 

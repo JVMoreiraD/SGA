@@ -1,9 +1,12 @@
 "use client"
 
+
+import { EditUserDialog } from "@/app/forms/EditUserDialog"
+import { DeleteDialog } from "@/components/DeleteDialog"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { ColumnDef } from "@tanstack/react-table"
-import { ArrowUpDown, EditIcon, MoreHorizontal, Trash2Icon } from "lucide-react"
+import { ArrowUpDown, MoreHorizontal } from "lucide-react"
 
 
 export type User = {
@@ -12,6 +15,8 @@ export type User = {
     email: string,
     role: string
 }
+
+
 
 export const columns: ColumnDef<User>[] = [
     {
@@ -43,11 +48,11 @@ export const columns: ColumnDef<User>[] = [
     {
         id: "actions",
         enableHiding: false,
-        cell: ({}) => {
-            // const payment = row.original
+
+        cell: ({ row }) => {
 
             return (
-                <DropdownMenu>
+                <DropdownMenu >
                     <DropdownMenuTrigger asChild>
                         <Button variant="ghost" className="h-8 w-8 p-0">
                             <span className="sr-only">Open menu</span>
@@ -56,16 +61,12 @@ export const columns: ColumnDef<User>[] = [
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Ações</DropdownMenuLabel>
-                        <DropdownMenuItem
-                        // onClick={() => navigator.clipboard.writeText(payment.id)}
-                        >
-                            <EditIcon />
-                            Editar
+                        <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                            <EditUserDialog user={{ email: row.getValue("email"), name: row.getValue("name"), phone: row.getValue("phone"), role: row.getValue("role") }} />
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem>
-                            <Trash2Icon />
-                            Deletar
+                        <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                            <DeleteDialog />
                         </DropdownMenuItem>
 
                     </DropdownMenuContent>
