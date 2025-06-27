@@ -7,8 +7,7 @@ async function getData(): Promise<Locker[]> {
         {
             Name: "Armário 3",
             Description: "Armário do bloco 3, corredor direito, primeiro andar",
-            Capacity: "3",
-
+            Capacity: "4/9",
             Group: "Alunos"
         },
         {
@@ -26,7 +25,6 @@ async function getData(): Promise<Locker[]> {
 }
 export default async function LockersPage() {
     const data = await getData()
-    console.log(data)
     return (
         <div className="w-full flex items-center justify-center">
             <DataTable columns={columns} data={data} />

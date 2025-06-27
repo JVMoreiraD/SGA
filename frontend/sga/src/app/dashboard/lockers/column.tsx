@@ -1,5 +1,6 @@
 "use client"
 
+import { BookKeyDialog } from "@/app/forms/BookKeyDialog"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { ColumnDef } from "@tanstack/react-table"
@@ -34,6 +35,14 @@ export const columns: ColumnDef<Locker>[] = [
             < div className="flex justify-center" >{row.getValue("Capacity")}</div>
         )
 
+    },
+    {
+        accessorKey: "Book",
+        header: "Alugar",
+
+        cell: ({}) => (
+            <BookKeyDialog />
+        )
     },
     {
         id: "actions",
