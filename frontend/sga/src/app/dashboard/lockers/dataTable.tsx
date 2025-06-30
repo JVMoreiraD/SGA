@@ -11,6 +11,7 @@ import {
     SortingState,
     useReactTable,
 } from "@tanstack/react-table"
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectSeparator, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 import {
     Table,
@@ -30,12 +31,32 @@ interface DataTableProps<TData, TValue> {
     data: TData[]
 }
 
+const groupOptions = [
+
+    {
+        value: "Professor",
+        label: "Professor",
+    },
+    {
+        value: "Aluno",
+        label: "Aluno",
+    },
+    {
+        value: "Terceirizado",
+        label: "Terceirizado",
+    }
+
+]
 export function DataTable<TData, TValue>({
     columns,
     data,
 }: DataTableProps<TData, TValue>) {
     const [sorting, setSorting] = React.useState<SortingState>([])
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
+    const [key, setKey] = React.useState(+new Date())
+    const [value, setValue] = React.useState<string | undefined>(undefined)
+
+
     const table = useReactTable({
         data,
         columns,
@@ -55,14 +76,60 @@ export function DataTable<TData, TValue>({
         <div>
 
             <div className="flex items-center py-4 mb-4 justify-between">
-                <Input
-                    placeholder="Buscar por identificação..."
-                    value={(table.getColumn("Name")?.getFilterValue() as string) ?? ""}
-                    onChange={(event) =>
-                        table.getColumn("Name")?.setFilterValue(event.target.value)
-                    }
-                    className="max-w-sm"
-                />
+                <div className="flex gap-2">
+                    <Input
+                        placeholder="Buscar por identificação..."
+                        value={(table.getColumn("Name")?.getFilterValue() as string) ?? ""}
+                        onChange={(event) =>
+                            table.getColumn("Name")?.setFilterValue(event.target.value)
+                        }
+                        className="max-w-sm"
+                    />
+                    <Select
+                        onValueChange={(event) => {
+                            { console.log(event) }
+                            table.getColumn("Group")?.setFilterValue(event)
+                        }
+                        }
+                        key={key} value={value}
+                    >
+                        <SelectTrigger className="w-[180px]">
+                            <SelectValue placeholder="Grupo" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectGroup
+
+                            >
+                                <SelectLabel>Grupo</SelectLabel>
+                                {
+                                    groupOptions.map((options) => (
+                                        <SelectItem key={options.value} value={options.value}
+
+
+
+                                        >
+                                            {options.label}
+                                        </SelectItem>
+                                    ))
+                                }
+                            </SelectGroup>
+                            <SelectSeparator />
+                            <Button
+                                className="w-full px-2"
+                                variant="secondary"
+                                size="sm"
+                                onClick={(e) => {
+                                    e.stopPropagation()
+                                    setValue(undefined)
+                                    setKey(+new Date())
+                                    table.getColumn("Group")?.setFilterValue(null)
+                                }}
+                            >
+                                Limpar
+                            </Button>
+                        </SelectContent>
+                    </Select>
+                </div>
                 <NewLockerDialog />
             </div>
             <div className="rounded-md border">
