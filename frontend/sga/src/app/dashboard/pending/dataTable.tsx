@@ -1,44 +1,41 @@
-'use client'
-import { NewUserDialog } from "@/app/forms/Users/NewUserDialog";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectSeparator, SelectTrigger, SelectValue } from "@/components/ui/select";
-// import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { ColumnDef, ColumnFiltersState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, SortingState, useReactTable } from "@tanstack/react-table";
-import React from "react";
+"use client"
+
+import {
+    ColumnDef,
+    ColumnFiltersState,
+    flexRender,
+    getCoreRowModel,
+    getFilteredRowModel,
+    getPaginationRowModel,
+    getSortedRowModel,
+    SortingState,
+    useReactTable,
+} from "@tanstack/react-table"
+
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table"
+import { Input } from "@/components/ui/input"
+import { NewKeyDialog } from "@/app/forms/Keys/NewKeyDialog"
+import { Button } from "@/components/ui/button"
+import React from "react"
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
     data: TData[]
 }
 
-const groupOptions = [
-
-    {
-        value: "Professor",
-        label: "Professor",
-    },
-    {
-        value: "Aluno",
-        label: "Aluno",
-    },
-    {
-        value: "Terceirizado",
-        label: "Terceirizado",
-    }
-
-]
 export function DataTable<TData, TValue>({
     columns,
     data,
 }: DataTableProps<TData, TValue>) {
     const [sorting, setSorting] = React.useState<SortingState>([])
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
-    const [value, setValue] = React.useState<string | undefined>(undefined)
-    const [key, setKey] = React.useState(+new Date())
-
-
     const table = useReactTable({
         data,
         columns,
@@ -53,77 +50,27 @@ export function DataTable<TData, TValue>({
             columnFilters
         },
     })
-
     return (
 
-        <div>
+        <div >
 
             <div className="flex items-center py-4 mb-4 justify-between">
-                <div className="flex gap-2">
-                    <Input
-                        placeholder="Buscar por nome..."
-                        value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-                        onChange={(event) =>
-                            table.getColumn("name")?.setFilterValue(event.target.value)
-                        }
-                        className="max-w-sm"
-                    />
-                    <Select
-                        onValueChange={(event) => {
-                            { console.log(event) }
-                            table.getColumn("role")?.setFilterValue(event)
-                        }
-                        }
-                        key={key} value={value}
-                    >
-                        <SelectTrigger className="w-[180px]">
-                            <SelectValue placeholder="Grupo" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectGroup
-
-                            >
-                                <SelectLabel>Grupo</SelectLabel>
-                                {
-                                    groupOptions.map((options) => (
-                                        <SelectItem key={options.value} value={options.value}
-
-
-
-                                        >
-                                            {options.label}
-                                        </SelectItem>
-                                    ))
-                                }
-                            </SelectGroup>
-                            <SelectSeparator />
-                            <Button
-                                className="w-full px-2"
-                                variant="secondary"
-                                size="sm"
-                                onClick={(e) => {
-                                    e.stopPropagation()
-                                    setValue(undefined)
-                                    setKey(+new Date())
-                                    table.getColumn("role")?.setFilterValue(null)
-                                }}
-                            >
-                                Limpar
-                            </Button>
-                        </SelectContent>
-                    </Select>
-
-
-
-                </div>
-                <NewUserDialog />
+                <Input
+                    placeholder="Buscar por chave..."
+                    value={(table.getColumn("key")?.getFilterValue() as string) ?? ""}
+                    onChange={(event) =>
+                        table.getColumn("key")?.setFilterValue(event.target.value)
+                    }
+                    className="max-w-sm"
+                />
+                <NewKeyDialog />
             </div>
-
             <div className="rounded-md border">
+
                 <Table>
                     <TableHeader>
                         {table.getHeaderGroups().map((headerGroup) => (
-                            <TableRow key={headerGroup.id} >
+                            <TableRow key={headerGroup.id}>
                                 {headerGroup.headers.map((header) => {
                                     return (
                                         <TableHead key={header.id}>
@@ -182,6 +129,7 @@ export function DataTable<TData, TValue>({
                 </Button>
             </div>
         </div>
+
+
     )
 }
-

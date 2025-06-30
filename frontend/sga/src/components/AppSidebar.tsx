@@ -1,4 +1,4 @@
-import { UsersRound, LockKeyhole, Settings, KeyRoundIcon, User2, ChevronUp } from "lucide-react"
+import { UsersRound, LockKeyhole, Settings, KeyRoundIcon, User2, ChevronUp, BookKey } from "lucide-react"
 
 import {
     Sidebar,
@@ -31,6 +31,11 @@ const items = [
         title: 'Chaves',
         url: "keys",
         icon: KeyRoundIcon
+    },
+    {
+        title: 'Chaves Pendentes',
+        url: 'pending',
+        icon: BookKey
     },
     {
         title: "Configurações",
