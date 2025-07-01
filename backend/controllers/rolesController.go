@@ -18,7 +18,8 @@ func CreateRole(c *gin.Context) {
 	}
 
 	var body struct {
-		RoleName string
+		RoleName    string
+		Description string
 	}
 
 	if c.Bind(&body) != nil {
@@ -27,7 +28,7 @@ func CreateRole(c *gin.Context) {
 		})
 		return
 	} else {
-		role := models.NewRoles(body.RoleName)
+		role := models.NewRoles(body.RoleName, body.Description)
 		result := initializers.DB.Create(&role)
 		if result.Error != nil {
 			c.JSON(http.StatusBadRequest, gin.H{
@@ -52,4 +53,35 @@ func GetRoles(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"roles": roles,
 	})
+}
+
+func UpdateRole(c *gin.Context) {
+	user, _ := c.Get("user")
+	if !user.(models.UserResponse).IsAdmin {
+		c.JSON(http.StatusForbidden, gin.H{
+			"error": "Unauthorized",
+		})
+		return
+	}
+
+	var body struct {
+		RoleName    string
+		Description string
+	}
+
+	if c.Bind(&body) != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Failed to read body",
+		})
+		return
+	} else {
+		role := models.NewRoles(body.RoleName, body.Description)
+		result := initializers.DB.Create(&role)
+		if result.Error != nil {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"error": "Failed to create key",
+			})
+		}
+		c.JSON(http.StatusOK, gin.H{})
+	}
 }

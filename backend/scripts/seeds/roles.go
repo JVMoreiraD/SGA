@@ -10,9 +10,14 @@ func main() {
 	initializers.ConnectToDatabase()
 
 	roles := []models.Roles{
-		{RoleName: "ESTUDANTE"},
-		{RoleName: "PROFESSOR"},
-		{RoleName: "TERCEIRIZADO"},
+		{RoleName: "ESTUDANTE",
+			Description: "Grupo de alunos",
+		},
+		{RoleName: "PROFESSOR",
+			Description: "Grupo dos professores"},
+		{RoleName: "TERCEIRIZADOS",
+			Description: "Grupo dos terceirizados",
+		},
 	}
 	for _, role := range roles {
 		initializers.DB.Create(&role)

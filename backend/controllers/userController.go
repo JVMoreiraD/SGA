@@ -44,7 +44,7 @@ func SignUp(c *gin.Context) {
 		return
 	}
 
-	user, err := models.NewBaseUser(body.Name, body.Email, body.Password, body.Password, body.IsAdmin, body.RoleID)
+	user, err := models.NewBaseUser(body.Name, body.Email, body.Phone, body.Password, body.IsAdmin, body.RoleID)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "Invalid user data",
@@ -75,7 +75,7 @@ func Login(c *gin.Context) {
 		return
 	}
 	var user models.User
-	initializers.DB.First(&user, "email = ?", body.Email)
+	initializers.DB.Preload("Role").First(&user, "email = ?", body.Email)
 	if len(user.ID) == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "Invalid email or password",
@@ -103,7 +103,7 @@ func Login(c *gin.Context) {
 	c.SetSameSite(http.SameSiteLaxMode)
 	c.SetCookie("Authorization", tokenString, 3600*24*30, "", "", false, true)
 	c.JSON(http.StatusOK, gin.H{
-		// "token": tokenString,
+		"token": tokenString,
 	})
 }
 func GetUsers(c *gin.Context) {
@@ -116,10 +116,10 @@ func GetUsers(c *gin.Context) {
 	}
 	var users []models.User
 	var usersResponse []models.UserResponse
-	initializers.DB.Preload("Roles").Preload("Locker").Preload("Locker.Key").Find(&users)
+	initializers.DB.Preload("Roles").Find(&users)
 	for _, user := range users {
 		var roleTemp = models.RolesResponse{ID: user.Roles.ID, RoleName: user.Roles.RoleName}
-		var temp = models.UserResponse{ID: user.ID, Name: user.Name, Email: user.Email, IsAdmin: user.IsAdmin, Role: roleTemp}
+		var temp = models.UserResponse{ID: user.ID, Name: user.Name, Phone: user.Phone, Email: user.Email, IsAdmin: user.IsAdmin, Role: roleTemp}
 		usersResponse = append(usersResponse, temp)
 	}
 	c.JSON(http.StatusOK, gin.H{
@@ -133,42 +133,3 @@ func Validate(c *gin.Context) {
 		"message": user,
 	})
 }
-
-// func AssignLockerToUser(c *gin.Context) {
-// 	user, _ := c.Get("user")
-// 	if !user.(models.UserResponse).IsAdmin {
-// 		c.JSON(http.StatusForbidden, gin.H{
-// 			"error": "Unauthorized",
-// 		})
-// 		return
-// 	}
-// 	var body struct {
-// 		UserID   uuid.UUID
-// 		LockerID uuid.UUID
-// 	}
-
-// 	if c.Bind(&body) != nil {
-// 		c.JSON(http.StatusBadRequest, gin.H{
-// 			"error": "failed to read body",
-// 		})
-// 		return
-// 	}
-
-// 	var userReq models.User
-// 	var lockerReq models.Locker
-
-// 	initializers.DB.First(&userReq, "id = ?", body.UserID)
-// 	initializers.DB.Preload("Group").First(&lockerReq, "id = ?", body.LockerID)
-
-// 	// if userReq.RoleID != lockerReq.Group.RoleID {
-// 	// 	c.JSON(http.StatusBadRequest, gin.H{
-// 	// 		"error": "Locker and User doesn't belong to same group",
-// 	// 	})
-// 	// 	return
-// 	// }
-
-// 	userReq.LockerID = &lockerReq.ID
-
-// 	initializers.DB.Save(&userReq)
-// 	c.JSON(http.StatusOK, gin.H{})
-// }

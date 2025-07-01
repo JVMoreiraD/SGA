@@ -16,6 +16,7 @@ import (
 func RequireAuth(c *gin.Context) {
 
 	var responseUser models.UserResponse
+	var responseRoles models.RolesResponse
 	tokenString, err := c.Cookie("Authorization")
 	if err != nil {
 
@@ -44,13 +45,14 @@ func RequireAuth(c *gin.Context) {
 		}
 		var user models.User
 
-		initializers.DB.First(&user, "id = ?", claims["sub"].(string))
+		initializers.DB.Preload("Roles").First(&user, "id = ?", claims["sub"].(string))
 		if len(user.ID) == 0 {
 
 			c.AbortWithStatus(http.StatusUnauthorized)
 
 		}
-		responseUser.ID, responseUser.Name, responseUser.Email, responseUser.IsAdmin = user.ID, user.Name, user.Email, user.IsAdmin
+		responseRoles.ID, responseRoles.RoleName = user.RoleID, user.Roles.RoleName
+		responseUser.ID, responseUser.Name, responseUser.Email, responseUser.IsAdmin, responseUser.Role = user.ID, user.Name, user.Email, user.IsAdmin, responseRoles
 		c.Set("user", responseUser)
 		c.Next()
 	} else {

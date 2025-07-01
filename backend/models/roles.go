@@ -7,8 +7,9 @@ import (
 
 type Roles struct {
 	gorm.Model
-	ID       uuid.UUID `gorm:"type:uuid;primary_key"`
-	RoleName string
+	ID          uuid.UUID `gorm:"type:uuid;primary_key"`
+	RoleName    string
+	Description string
 }
 
 func (u *Roles) BeforeCreate(tx *gorm.DB) (err error) {
@@ -17,9 +18,10 @@ func (u *Roles) BeforeCreate(tx *gorm.DB) (err error) {
 	return
 }
 
-func NewRoles(roleName string) *Roles {
+func NewRoles(roleName string, description string) *Roles {
 	return &Roles{
-		ID:       uuid.New(),
-		RoleName: roleName,
+		ID:          uuid.New(),
+		RoleName:    roleName,
+		Description: description,
 	}
 }
