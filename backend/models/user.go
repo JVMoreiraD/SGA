@@ -8,34 +8,34 @@ import (
 
 type User struct {
 	gorm.Model
-	ID       uuid.UUID `gorm:"type:uuid;primary_key;"`
+	ID       uuid.UUID `gorm:"type:uuid;primary_key"`
 	Name     string
 	Email    string `gorm:"unique"`
+	Phone    string `gorm:"unique"`
 	Password string
-	IsAdmin  bool `gorm:"default:False"`
+	IsAdmin  bool `gorm:"default:false"`
 	RoleID   uuid.UUID
-	Roles    Roles      `gorm:"foreignKey:RoleID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
-	LockerID *uuid.UUID `gorm:"default:null"`
-	Locker   *Locker    `gorm:"foreignKey:LockerID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;default:null"`
+	Key      *Key  `gorm:"foreignKey:UserID"` // 1:1 relationship
+	Roles    Roles `gorm:"foreignKey:RoleID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 }
 
 func (u *User) BeforeCreate(tx *gorm.DB) (err error) {
 	u.ID = uuid.New()
-
 	return
 }
-func NewBaseUser(name string, email string, password string, isAdmin bool, rolesID uuid.UUID) (*User, error) {
 
+func NewBaseUser(name, email, phone, password string, isAdmin bool, roleID uuid.UUID) (*User, error) {
 	hash, err := bcrypt.GenerateFromPassword([]byte(password), 10)
 	if err != nil {
-		return &User{}, err
+		return nil, err
 	}
 	return &User{
 		ID:       uuid.New(),
 		Name:     name,
 		Email:    email,
+		Phone:    phone,
 		Password: string(hash),
 		IsAdmin:  isAdmin,
-		RoleID:   rolesID,
+		RoleID:   roleID,
 	}, nil
 }

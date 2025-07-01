@@ -19,6 +19,7 @@ func SignUp(c *gin.Context) {
 		Email    string
 		Password string
 		IsAdmin  bool
+		Phone    string
 		RoleID   uuid.UUID
 	}
 
@@ -43,7 +44,7 @@ func SignUp(c *gin.Context) {
 		return
 	}
 
-	user, err := models.NewBaseUser(body.Name, body.Email, body.Password, body.IsAdmin, body.RoleID)
+	user, err := models.NewBaseUser(body.Name, body.Email, body.Password, body.Password, body.IsAdmin, body.RoleID)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "Invalid user data",
@@ -133,41 +134,41 @@ func Validate(c *gin.Context) {
 	})
 }
 
-func AssignLockerToUser(c *gin.Context) {
-	user, _ := c.Get("user")
-	if !user.(models.UserResponse).IsAdmin {
-		c.JSON(http.StatusForbidden, gin.H{
-			"error": "Unauthorized",
-		})
-		return
-	}
-	var body struct {
-		UserID   uuid.UUID
-		LockerID uuid.UUID
-	}
+// func AssignLockerToUser(c *gin.Context) {
+// 	user, _ := c.Get("user")
+// 	if !user.(models.UserResponse).IsAdmin {
+// 		c.JSON(http.StatusForbidden, gin.H{
+// 			"error": "Unauthorized",
+// 		})
+// 		return
+// 	}
+// 	var body struct {
+// 		UserID   uuid.UUID
+// 		LockerID uuid.UUID
+// 	}
 
-	if c.Bind(&body) != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "failed to read body",
-		})
-		return
-	}
+// 	if c.Bind(&body) != nil {
+// 		c.JSON(http.StatusBadRequest, gin.H{
+// 			"error": "failed to read body",
+// 		})
+// 		return
+// 	}
 
-	var userReq models.User
-	var lockerReq models.Locker
+// 	var userReq models.User
+// 	var lockerReq models.Locker
 
-	initializers.DB.First(&userReq, "id = ?", body.UserID)
-	initializers.DB.Preload("Group").First(&lockerReq, "id = ?", body.LockerID)
+// 	initializers.DB.First(&userReq, "id = ?", body.UserID)
+// 	initializers.DB.Preload("Group").First(&lockerReq, "id = ?", body.LockerID)
 
-	if userReq.RoleID != lockerReq.Group.RoleID {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Locker and User doesn't belong to same group",
-		})
-		return
-	}
+// 	// if userReq.RoleID != lockerReq.Group.RoleID {
+// 	// 	c.JSON(http.StatusBadRequest, gin.H{
+// 	// 		"error": "Locker and User doesn't belong to same group",
+// 	// 	})
+// 	// 	return
+// 	// }
 
-	userReq.LockerID = &lockerReq.ID
+// 	userReq.LockerID = &lockerReq.ID
 
-	initializers.DB.Save(&userReq)
-	c.JSON(http.StatusOK, gin.H{})
-}
+// 	initializers.DB.Save(&userReq)
+// 	c.JSON(http.StatusOK, gin.H{})
+// }

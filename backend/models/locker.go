@@ -8,27 +8,26 @@ import (
 type Locker struct {
 	gorm.Model
 	ID             uuid.UUID `gorm:"type:uuid;primary_key"`
-	Identification string
-	KeyID          uuid.UUID `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
-	Key            Key       `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
-	GroupID        uuid.UUID
-	Group          LockerGroups `gorm:"foreignKey:GroupID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;default:null"`
+	Identification string    `gorm:"not null"`
+	Keys           []Key     `gorm:"foreignKey:LockerID"` // 1:N relationship
+	RoleID         uuid.UUID
+
+	Roles Roles `gorm:"foreignKey:RoleID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 }
 
-func (u *Locker) BeforeCreate(tx *gorm.DB) (err error) {
-	u.ID = uuid.New()
-
+func (l *Locker) BeforeCreate(tx *gorm.DB) (err error) {
+	l.ID = uuid.New()
 	return
 }
+func (l *Locker) AddKeyToLocker(key *Key) {
+	key.LockerID = &l.ID
+	l.Keys = append(l.Keys, *key)
+}
 
-func NewLocker(identification string, keyID uuid.UUID, groupID uuid.UUID, key Key, group LockerGroups) *Locker {
-
+func NewLocker(identification string, role Roles) *Locker {
 	return &Locker{
 		ID:             uuid.New(),
 		Identification: identification,
-		KeyID:          keyID,
-		GroupID:        groupID,
-		Key:            key,
-		Group:          group,
+		Roles:          role,
 	}
 }
