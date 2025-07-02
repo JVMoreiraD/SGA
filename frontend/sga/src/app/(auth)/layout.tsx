@@ -1,7 +1,15 @@
 import { AppSidebar } from "@/components/AppSidebar"
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
+import { getServerSession } from "next-auth"
+import { nextAuthOptions } from "../api/auth/[...nextauth]/route"
+import { redirect } from "next/navigation"
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default async function Layout({ children }: { children: React.ReactNode }) {
+    const session = await getServerSession(nextAuthOptions)
+
+    if (!session) {
+        redirect("/")
+    }
     return (
         <SidebarProvider>
             <AppSidebar />

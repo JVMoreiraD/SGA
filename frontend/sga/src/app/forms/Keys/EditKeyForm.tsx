@@ -4,7 +4,7 @@ import { z } from "zod"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "@/components/ui/button"
-import { Key } from "../../dashboard/keys/columns"
+import { Key } from "../../(auth)/dashboard/keys/columns"
 
 
 export const formSchema = z.object({

@@ -89,10 +89,14 @@ func Login(c *gin.Context) {
 		})
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"sub": user.ID,
+		"sub": user.ID.String(),
 		"exp": time.Now().Add(time.Hour * 24 * 30).Unix(),
 	})
+	// secret := []byte("muitosecreto")
+	// tokenString, err := token.SignedString(secret)
+
 	tokenString, err := token.SignedString([]byte(os.Getenv("SECRET")))
+	// tokenString, err := token.SignedString([]byte("muitosecreto"))
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -103,7 +107,10 @@ func Login(c *gin.Context) {
 	c.SetSameSite(http.SameSiteLaxMode)
 	c.SetCookie("Authorization", tokenString, 3600*24*30, "", "", false, true)
 	c.JSON(http.StatusOK, gin.H{
-		"token": tokenString,
+		"jwt":   tokenString,
+		"id":    user.ID,
+		"email": user.Email,
+		"name":  user.Name,
 	})
 }
 func GetUsers(c *gin.Context) {

@@ -6,5 +6,6 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function getApiUrl(url: string) {
-  return `${process.env.URLAPI}/${url}`
+  return `${process.env.URLAPI}${url}`
+
 }

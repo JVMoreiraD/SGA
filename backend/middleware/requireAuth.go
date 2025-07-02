@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/JVMoreiraD/SGA/initializers"
@@ -17,12 +18,15 @@ func RequireAuth(c *gin.Context) {
 
 	var responseUser models.UserResponse
 	var responseRoles models.RolesResponse
-	tokenString, err := c.Cookie("Authorization")
-	if err != nil {
+	tokenString := c.GetHeader("Authorization")
+	// if _ != nil {
 
-		c.AbortWithStatus(http.StatusUnauthorized)
-		return
-	}
+	// 	c.AbortWithStatus(http.StatusUnauthorized)
+	// 	return
+	// }
+	tokenString = strings.TrimPrefix(tokenString, "Bearer ")
+	fmt.Println(tokenString)
+
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 

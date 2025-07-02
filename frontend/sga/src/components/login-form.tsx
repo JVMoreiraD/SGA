@@ -16,7 +16,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel } from "./ui/form"
 
 import { useForm } from "react-hook-form"
 import { signIn } from "next-auth/react"
-
+import { useRouter } from "next/navigation"
 export const formSchema = z.object({
     email: z.string().min(2, {
         message: "Insira a email da chave",
@@ -30,6 +30,7 @@ export function LoginForm({
     className,
     ...props
 }: React.ComponentPropsWithoutRef<"div">) {
+    const router = useRouter()
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -40,7 +41,8 @@ export function LoginForm({
     async function onSubmit(values: z.infer<typeof formSchema>) {
         try {
             const result = await signIn("credentials", {
-                ...values
+                ...values,
+                redirect: false
             })
 
 
@@ -49,7 +51,7 @@ export function LoginForm({
                 return
             }
 
-            // router.push("/dashboard")
+            router.replace("/dashboard/users")
             // router.refresh()
         } catch (error) {
             console.error(error)

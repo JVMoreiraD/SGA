@@ -1,3 +1,4 @@
+'use client'
 import { UsersRound, LockKeyhole, Settings, KeyRoundIcon, User2, ChevronUp, BookKey } from "lucide-react"
 
 import {
@@ -12,7 +13,12 @@ import {
     SidebarMenuItem,
 } from "@/components/ui/sidebar"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu"
+import { signOut } from "next-auth/react"
+import { useRouter } from "next/navigation"
 
+// import { getServerSession } from "next-auth"
+
+// import { nextAuthOptions } from "@/app/api/auth/[...nextauth]/route"
 // Menu items.
 const items = [
     {
@@ -46,6 +52,16 @@ const items = [
 ]
 
 export function AppSidebar() {
+    const router = useRouter()
+    // const session = getServerSession(nextAuthOptions)
+    // console.log(session)
+    async function handleSignOut() {
+        await signOut({
+            redirect: false
+        })
+
+        router.replace("/")
+    }
     return (
         <Sidebar className="overflow-hidden">
             <SidebarContent>
@@ -86,7 +102,7 @@ export function AppSidebar() {
                                     <span>Conta</span>
                                 </DropdownMenuItem>
 
-                                <DropdownMenuItem>
+                                <DropdownMenuItem onClick={({}) => (handleSignOut())}>
                                     <span>Sair</span>
                                 </DropdownMenuItem>
                             </DropdownMenuContent>

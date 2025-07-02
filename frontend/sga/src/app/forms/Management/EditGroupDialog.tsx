@@ -10,7 +10,7 @@ import {
 import { z } from "zod"
 
 import { useState } from "react"
-import { Group } from "../../dashboard/management/columns"
+import { Group } from "../../(auth)/dashboard/management/columns"
 import { EditGroupForm, formSchema } from "./EditGroupForm"
 
 
