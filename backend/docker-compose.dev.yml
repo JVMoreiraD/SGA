@@ -14,6 +14,17 @@ services:
     volumes:
       - pgdata:/data/postgres
 
+  testing-database:
+    image: postgres
+    container_name: test_db_sga
+    ports:
+      - 5433:5432  # exposed on a different host port
+    environment:
+      - POSTGRES_USER=test_user
+      - POSTGRES_PASSWORD=test_pass
+      - POSTGRES_DB=test_db
+    volumes:
+      - test_pgdata:/data/postgres
   app:
     build: .
     volumes:
@@ -27,8 +38,14 @@ services:
 
     links:
       - database
+      - testing-database
+
     depends_on:
       - database
+      - testing-database
+
 volumes:
   pgdata:
+    driver: local
+  test_pgdata:
     driver: local

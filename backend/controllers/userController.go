@@ -1,18 +1,17 @@
 package controllers
 
 import (
-	"errors"
 	"net/http"
 	"os"
 	"time"
 
 	"github.com/JVMoreiraD/SGA/initializers"
 	"github.com/JVMoreiraD/SGA/models"
+	"github.com/JVMoreiraD/SGA/repository"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
-	"gorm.io/gorm"
 )
 
 type SignUpRequest struct {
@@ -62,21 +61,23 @@ func SignUp(c *gin.Context) {
 		return
 	}
 
-	user, err := models.NewBaseUser(body.Name, body.Email, body.Phone, body.Password, body.IsAdmin, body.RoleID)
+	_, err := repository.NewBaseUser(body.Name, body.Email, body.Phone, body.Password, body.IsAdmin, body.RoleID)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "Invalid user data",
 		})
 	}
-	result := initializers.DB.Create(&user)
+	// result := initializers.DB.Create(&user)
 
-	if result.Error != nil {
+	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "Failed to create user",
 		})
 	}
 
-	c.JSON(http.StatusOK, gin.H{})
+	c.JSON(http.StatusOK, gin.H{
+		"message": "User created with success",
+	})
 
 }
 
@@ -106,9 +107,8 @@ func Login(c *gin.Context) {
 		})
 		return
 	}
-	var user models.User
-	initializers.DB.Preload("Role").First(&user, "email = ?", body.Email)
-	if len(user.ID) == 0 {
+	user := repository.GetUserByEmail(body.Email)
+	if user == nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "Invalid email or password",
 		})
@@ -120,15 +120,13 @@ func Login(c *gin.Context) {
 			"error": "Invalid email or password",
 		})
 	}
+
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"sub": user.ID.String(),
 		"exp": time.Now().Add(time.Hour * 24 * 30).Unix(),
 	})
-	// secret := []byte("muitosecreto")
-	// tokenString, err := token.SignedString(secret)
 
 	tokenString, err := token.SignedString([]byte(os.Getenv("SECRET")))
-	// tokenString, err := token.SignedString([]byte("muitosecreto"))
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -181,9 +179,9 @@ func GetUsers(c *gin.Context) {
 		})
 		return
 	}
-	var users []models.User
+	users := repository.GetAllUsers()
 	var usersResponse []models.UserResponse
-	initializers.DB.Preload("Roles").Find(&users)
+
 	for _, user := range users {
 		var roleTemp = models.RolesResponse{ID: user.Roles.ID, RoleName: user.Roles.RoleName}
 		var temp = models.UserResponse{ID: user.ID, Name: user.Name, Phone: user.Phone, Email: user.Email, IsAdmin: user.IsAdmin, Role: roleTemp}
@@ -221,7 +219,7 @@ func UpdateUser(c *gin.Context) {
 	}
 
 	// Get user ID from path
-	userID := c.Param("id")
+	userID := c.Query("id")
 	if _, err := uuid.Parse(userID); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "Unauthorized",
@@ -310,10 +308,10 @@ func DeleteUser(c *gin.Context) {
 	}
 
 	// Validate user ID
-	userID := c.Param("id")
+	userID := c.Query("id")
 	if _, err := uuid.Parse(userID); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Unauthorized",
+			"error": userID,
 		})
 		return
 	}
@@ -326,28 +324,7 @@ func DeleteUser(c *gin.Context) {
 		return
 	}
 
-	// Check if user exists
-	var userToDelete models.User
-	if err := initializers.DB.First(&userToDelete, "id = ?", userID).Error; err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			c.JSON(http.StatusNotFound, gin.H{
-				"error": "Unauthorized",
-			})
-		} else {
-			c.JSON(http.StatusInternalServerError, gin.H{
-				"error": "Unauthorized",
-			})
-		}
-		return
-	}
-
-	// Delete the user
-	if err := initializers.DB.Delete(&userToDelete).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": "Unauthorized",
-		})
-		return
-	}
+	repository.DeleteUser(userID)
 
 	// Return success (no content)
 	c.Status(http.StatusNoContent)

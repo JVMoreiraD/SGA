@@ -24,18 +24,43 @@ func (u *User) BeforeCreate(tx *gorm.DB) (err error) {
 	return
 }
 
-func NewBaseUser(name, email, phone, password string, isAdmin bool, roleID uuid.UUID) (*User, error) {
-	hash, err := bcrypt.GenerateFromPassword([]byte(password), 10)
-	if err != nil {
-		return nil, err
+func UpdateUser(db *gorm.DB, id uuid.UUID, updates map[string]interface{}) error {
+	var user User
+
+	// Busca o usuário pelo ID
+	if err := db.First(&user, "id = ?", id).Error; err != nil {
+		return err // Retorna erro se usuário não existir
 	}
-	return &User{
-		ID:       uuid.New(),
-		Name:     name,
-		Email:    email,
-		Phone:    phone,
-		Password: string(hash),
-		IsAdmin:  isAdmin,
-		RoleID:   roleID,
-	}, nil
+
+	// Atualiza a senha, se estiver presente
+	if pwd, ok := updates["password"].(string); ok && pwd != "" {
+		hashedPwd, err := bcrypt.GenerateFromPassword([]byte(pwd), 10)
+		if err != nil {
+			return err
+		}
+		updates["password"] = string(hashedPwd)
+	}
+
+	// Atualiza os campos restantes
+	if err := db.Model(&user).Updates(updates).Error; err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func DeleteUser(db *gorm.DB, id uuid.UUID) error {
+	var user User
+
+	// Busca para garantir que o usuário exista
+	if err := db.First(&user, "id = ?", id).Error; err != nil {
+		return err
+	}
+
+	// Deleta o usuário
+	if err := db.Delete(&user).Error; err != nil {
+		return err
+	}
+
+	return nil
 }

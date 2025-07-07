@@ -19,7 +19,7 @@ func CreateLocker(c *gin.Context) {
 	}
 	var body struct {
 		Identification string        `json:"identification" binding:"required"`
-		Keys           []keysRequest `json:"keys" binding:"required"`
+		Keys           []KeysRequest `json:"keys" binding:"required"`
 		GroupID        *string       `json:"group_id"` // Optional
 	}
 
@@ -30,14 +30,14 @@ func CreateLocker(c *gin.Context) {
 		return
 	} else {
 		var locker models.Locker
-		lockerWithThisKey := initializers.DB.First(&locker, " key_id = ? ", body.KeyID)
-		if lockerWithThisKey.RowsAffected == 1 {
-			c.JSON(http.StatusBadRequest, gin.H{
-				"error": "There is another locker with this key",
-			})
-			return
-		}
-		lockerAlreadyExists := initializers.DB.First(&locker, "group_id = ? OR key_id = ? AND identification = ?", body.GroupID, body.KeyID, body.Identification)
+		// lockerWithThisKey := initializers.DB.First(&locker, " key_id = ? ", body.KeyID)
+		// if lockerWithThisKey.RowsAffected == 1 {
+		// 	c.JSON(http.StatusBadRequest, gin.H{
+		// 		"error": "There is another locker with this key",
+		// 	})
+		// 	return
+		// }
+		lockerAlreadyExists := initializers.DB.First(&locker, "identification = ?", body.Identification)
 		if lockerAlreadyExists.RowsAffected == 1 {
 			c.JSON(http.StatusBadRequest, gin.H{
 				"error": "Locker Already exists in this Group or there",

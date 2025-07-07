@@ -41,6 +41,7 @@ func main() {
 	r.POST("/signup", controllers.SignUp)
 	r.GET("/users", middleware.RequireAuth, controllers.GetUsers)
 	r.PATCH("/users", middleware.RequireAuth, controllers.UpdateUser)
+	r.DELETE("/users", middleware.RequireAuth, controllers.DeleteUser)
 
 	//Keys route
 	r.POST("/keys", middleware.RequireAuth, controllers.KeysCreate)

@@ -11,7 +11,7 @@ import (
 	"gorm.io/gorm"
 )
 
-type keysRequest struct {
+type KeysRequest struct {
 	Identification string `json:"Identification" example:"2680"`
 	Quantity       int    `json:"Quantity" example:"10"`
 }
@@ -24,7 +24,7 @@ type keysRequest struct {
 // @Accept json
 // @Produce json
 //
-//	@Param request body keysRequest true "Key creation data"
+//	@Param request body KeysRequest true "Key creation data"
 //
 // @Success 200
 // @Failure 400
@@ -40,7 +40,7 @@ func KeysCreate(c *gin.Context) {
 		})
 		return
 	}
-	var body keysRequest
+	var body KeysRequest
 
 	if c.Bind(&body) != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -102,7 +102,7 @@ type updateData struct {
 // @Produce json
 // @Param id path string true "Key ID (UUID)"
 //
-//	@Param request body  keysRequest false "Key update data"
+//	@Param request body  KeysRequest false "Key update data"
 //
 // @Success 200
 // @Failure 400
